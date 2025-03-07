@@ -4,9 +4,15 @@ import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// API URL
-const API_URL = 'http://10.0.2.2:8000'; // Use this for Android emulator
-// const API_URL = 'http://localhost:8000'; // Use this for iOS simulator
+// API URL options - uncomment the one that works for your setup
+// For Android emulator
+const API_URL = 'http://10.0.2.2:8000'; 
+
+// For iOS simulator
+// const API_URL = 'http://localhost:8000'; 
+
+// If running on a physical device, use your computer's IP address on your local network
+// const API_URL = 'http://192.168.1.X:8000'; // Replace X with your actual IP
 
 export default function NotesScreen() {
   const [notes, setNotes] = useState([]);

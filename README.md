@@ -89,3 +89,32 @@ npx expo start
 - **GET /alldays** - Get all day notes
 - **PUT /update/{note_id}** - Update a day note
 - **DELETE /delete/{note_id}** - Delete a day note
+
+## Troubleshooting
+
+### Connection Issues
+
+If you see errors like "ERR_CONNECTION_TIMED_OUT" or "Failed to fetch" when using the app:
+
+1. **Verify the backend is running**
+   - Make sure the FastAPI server is running with `python app.py` in the backend directory
+   - Confirm it's running on the correct port (8000 by default)
+
+2. **Check API URL configuration**
+   - Edit `frontend/app/index.js` and modify the API_URL:
+     - For Android emulator: `http://10.0.2.2:8000` (special address to reach host machine)
+     - For iOS simulator: `http://localhost:8000`
+     - For physical devices: Use your computer's local IP address like `http://192.168.1.X:8000`
+
+3. **Network Configuration**
+   - Make sure your phone/emulator and computer are on the same network
+   - Check if your firewall is blocking the connections
+   - Try disabling any VPN services that might interfere
+
+4. **Testing the API**
+   - Use a tool like Postman or curl to test API endpoints directly
+   - Check the backend logs for any error messages
+
+5. **CORS Issues**
+   - The backend has CORS configured to accept requests from any origin
+   - If you see CORS errors, restart the backend server to apply the CORS configuration
