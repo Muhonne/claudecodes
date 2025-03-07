@@ -15,35 +15,40 @@ class DayNote(BaseModel):
 # In-memory storage for simplicity (replace with a database in production)
 day_notes = {}
 
+class DayNoteCreate(BaseModel):
+    content: str
+    rating: int = Field(..., ge=1, le=5)
+
 @app.post("/create", response_model=DayNote)
-def create_day_note(content: str, rating: int = Field(..., ge=1, le=5)):
+def create_day_note(note: DayNoteCreate):
     note_id = str(uuid.uuid4())
     today = date.today()
     
     new_note = DayNote(
         id=note_id,
         date=today,
-        content=content,
-        rating=rating
+        content=note.content,
+        rating=note.rating
     )
     
     day_notes[note_id] = new_note
     return new_note
 
+class DayNoteUpdate(BaseModel):
+    content: str = None
+    rating: int = Field(None, ge=1, le=5)
+
 @app.put("/update/{note_id}", response_model=DayNote)
-def update_day_note(note_id: str, content: str = None, rating: int = None):
+def update_day_note(note_id: str, update_data: DayNoteUpdate):
     if note_id not in day_notes:
         raise HTTPException(status_code=404, detail="Note not found")
     
     note = day_notes[note_id]
     
-    if content is not None:
-        note.content = content
-    if rating is not None:
-        if 1 <= rating <= 5:
-            note.rating = rating
-        else:
-            raise HTTPException(status_code=400, detail="Rating must be between 1 and 5")
+    if update_data.content is not None:
+        note.content = update_data.content
+    if update_data.rating is not None:
+        note.rating = update_data.rating
     
     day_notes[note_id] = note
     return note

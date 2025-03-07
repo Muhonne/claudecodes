@@ -7,7 +7,10 @@ from datetime import date
 client = TestClient(app)
 
 def test_create_day_note():
-    response = client.post("/create", params={"content": "Test day note", "rating": 4})
+    response = client.post(
+        "/create", 
+        json={"content": "Test day note", "rating": 4}
+    )
     
     assert response.status_code == 200
     data = response.json()
@@ -48,7 +51,10 @@ def test_update_day_note():
     note_id = test_create_day_note()
     
     # Test update note
-    response = client.put(f"/update/{note_id}", params={"content": "Updated content", "rating": 5})
+    response = client.put(
+        f"/update/{note_id}", 
+        json={"content": "Updated content", "rating": 5}
+    )
     
     assert response.status_code == 200
     data = response.json()
@@ -62,7 +68,10 @@ def test_update_day_note_partial():
     note_id = test_create_day_note()
     
     # Test update only content
-    response = client.put(f"/update/{note_id}", params={"content": "Only content updated"})
+    response = client.put(
+        f"/update/{note_id}", 
+        json={"content": "Only content updated"}
+    )
     
     assert response.status_code == 200
     data = response.json()
@@ -72,7 +81,10 @@ def test_update_day_note_partial():
     assert data["rating"] == 4  # Unchanged
     
     # Test update only rating
-    response = client.put(f"/update/{note_id}", params={"rating": 2})
+    response = client.put(
+        f"/update/{note_id}", 
+        json={"rating": 2}
+    )
     
     assert response.status_code == 200
     data = response.json()
@@ -86,19 +98,28 @@ def test_update_invalid_rating():
     note_id = test_create_day_note()
     
     # Test update with invalid rating
-    response = client.put(f"/update/{note_id}", params={"rating": 6})
+    response = client.put(
+        f"/update/{note_id}", 
+        json={"rating": 6}
+    )
     
-    assert response.status_code == 400
+    assert response.status_code == 422  # Validation error
     
     # Test update with another invalid rating
-    response = client.put(f"/update/{note_id}", params={"rating": 0})
+    response = client.put(
+        f"/update/{note_id}", 
+        json={"rating": 0}
+    )
     
-    assert response.status_code == 400
+    assert response.status_code == 422  # Validation error
 
 def test_update_nonexistent_note():
     fake_id = str(uuid.uuid4())
     
-    response = client.put(f"/update/{fake_id}", params={"content": "This should fail"})
+    response = client.put(
+        f"/update/{fake_id}", 
+        json={"content": "This should fail"}
+    )
     
     assert response.status_code == 404
 
