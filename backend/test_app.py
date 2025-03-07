@@ -6,6 +6,17 @@ from datetime import date
 
 client = TestClient(app)
 
+def create_test_note():
+    """Helper function to create a test note and return its ID"""
+    response = client.post(
+        "/create", 
+        json={"content": "Test day note", "rating": 4}
+    )
+    
+    assert response.status_code == 200
+    data = response.json()
+    return data["id"]
+
 def test_create_day_note():
     response = client.post(
         "/create", 
@@ -19,13 +30,10 @@ def test_create_day_note():
     assert data["content"] == "Test day note"
     assert data["rating"] == 4
     assert "date" in data
-    
-    # Store ID for other tests
-    return data["id"]
 
 def test_get_all_day_notes():
     # Create a note first
-    note_id = test_create_day_note()
+    note_id = create_test_note()
     
     # Test get all notes
     response = client.get("/alldays")
@@ -48,7 +56,7 @@ def test_get_all_day_notes():
 
 def test_update_day_note():
     # Create a note first
-    note_id = test_create_day_note()
+    note_id = create_test_note()
     
     # Test update note
     response = client.put(
@@ -65,7 +73,7 @@ def test_update_day_note():
 
 def test_update_day_note_partial():
     # Create a note first
-    note_id = test_create_day_note()
+    note_id = create_test_note()
     
     # Test update only content
     response = client.put(
@@ -95,7 +103,7 @@ def test_update_day_note_partial():
 
 def test_update_invalid_rating():
     # Create a note first
-    note_id = test_create_day_note()
+    note_id = create_test_note()
     
     # Test update with invalid rating
     response = client.put(
@@ -125,7 +133,7 @@ def test_update_nonexistent_note():
 
 def test_delete_day_note():
     # Create a note first
-    note_id = test_create_day_note()
+    note_id = create_test_note()
     
     # Delete the note
     response = client.delete(f"/delete/{note_id}")
@@ -136,7 +144,10 @@ def test_delete_day_note():
     assert data["message"] == "Note deleted successfully"
     
     # Verify it's deleted
-    response = client.put(f"/update/{note_id}", params={"content": "Should be deleted"})
+    response = client.put(
+        f"/update/{note_id}", 
+        json={"content": "Should be deleted"}
+    )
     assert response.status_code == 404
 
 def test_delete_nonexistent_note():
