@@ -1,0 +1,18 @@
+🚀 Just finished building "MakeMyday" - a full-stack daily journal app!
+
+I created this application to help track daily experiences with a simple rating system. Here's what I built:
+
+💻 Backend: Python with FastAPI providing a clean RESTful API for managing journal entries
+📱 Frontend: React Native mobile app using Expo for cross-platform compatibility
+
+Key features:
+• Create daily notes with content and 1-5 star ratings
+• View, edit, and delete past entries
+• Clean, intuitive mobile interface
+• Comprehensive unit testing
+
+This project demonstrates how quickly you can build a functional cross-platform application with modern tools. The combination of FastAPI + React Native provides a great developer experience while creating performant applications.
+
+What's your go-to tech stack for building full-stack applications quickly?
+
+#WebDevelopment #Python #ReactNative #FullStack #MobileDevelopment #Expo #FastAPI
